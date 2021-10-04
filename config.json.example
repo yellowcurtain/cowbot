@@ -1,0 +1,14 @@
+{   
+  "twitter": {
+    "appKey": "",
+    "appSecret": "",
+    "accessToken": "",
+    "accessSecret": ""
+  },
+  "discord": {
+    "webHookUrl": "web hook url of channel"
+  }
+  "main": {
+    "providerUrl" : "provider url, such as infura"
+  }
+}
