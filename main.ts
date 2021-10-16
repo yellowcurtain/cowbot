@@ -25,31 +25,27 @@ function sleep(ms) {
         const filt = {
             address: contractAddress,
             fromBlock: startBlock, //13332639
-            toBlock: endBlock
+            toBlock: endBlock //13349144
         }
         const logs = await provider.getLogs(filt)
         
-        // group logs by tx
-        let logsByTx = new Map()
+        // group tx        
+        let transactions = new Array()
         for (const log of logs) {
-          const txHash = log.transactionHash      
-          if (logsByTx.get(txHash) != null) {
-            let txLogs = logsByTx.get(txHash)
-            txLogs.push(log)
-            logsByTx.set(txHash, txLogs)  
-          } else {
-            let txLogs = new Array()
-            txLogs.push(log)
-            logsByTx.set(txHash, txLogs)    
-          }          
+          const txHash = log.transactionHash  
+          if (!transactions.includes(txHash)) {
+            transactions.push(txHash)
+          }
         }
-
-        logsByTx.forEach((value,key)=>{
-          const logs = value
-          const txHash = key
-          const result = isCow(logs)
+        
+        // console.log(transactions)
+        for (const txHash of transactions) {
+          const txReceipt = await provider.getTransactionReceipt(txHash)
+          const txLogs = txReceipt.logs
+          // console.log(txLogs)
+          const result = isCow(txLogs)
           console.log(txHash)
-          console.log(result)      
+          console.log(result)
           
           if (result) {
             const text = "We found a cow: https://etherscan.io/tx/" + txHash
@@ -57,7 +53,7 @@ function sleep(ms) {
             sendDiscordMessage(text)
             sendTwitterMessage(text)
           }
-        })
+        }
         
         // wait to fetch data every minutes
         await sleep(60000)
