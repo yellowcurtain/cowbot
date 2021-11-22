@@ -6,7 +6,6 @@ export const SETTLEMENT_CONTRACT = GPv2Settlement["1"].address.toLowerCase()
 
 export function isCow(log_entries: Array<Log>): boolean {
   const parsed = parseLogs(log_entries)
-  //console.log(parsed)
   return _isCow(parsed)
 }
 
@@ -25,7 +24,6 @@ function _isCow(parsed: ParsedLogs): boolean {
     console.log(`${inAmount} vs ${outAmount}`)
     // If less than 90% of inflow amount, flew back out this is a good sign for a CoW!
     if (outAmount.mul(10).div(inAmount).lt(9)) {    
-      //sendDiscord()
       return true
     }
   }
@@ -36,11 +34,8 @@ function parseLogs(log_entries: Array<Log>): ParsedLogs {
   const inflows = new Map()
   const outflows = new Map()
 
-  const x = indexOfLastInteraction(log_entries)
-  //console.log(x)
-  
+  const x = indexOfLastInteraction(log_entries)  
   const relevant_logs = log_entries.slice(0, indexOfLastInteraction(log_entries))
-  //console.log(relevant_logs)
   
   for (const entry of relevant_logs) {
     switch (entry.topics[0]) {
@@ -81,163 +76,3 @@ function indexOfLastInteraction(log_entries: Array<Log>) {
   }
   return index
 }
-
-
-//
-// (async () => {
-//   try {
-//     console.log("start")
-//
-//     const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/3cf09824e2164be79af077c456dbf13f')
-//     const contractAddress = "0x9008d19f58aabd9ed0d60971565aa8510560ab41"
-//     const filt = {
-//         address: contractAddress,
-//         fromBlock: 13332639,
-//         toBlock: 13332639
-//     }
-//     const logs = await provider.getLogs(filt)
-//     console.log(logs)
-//     // isCow(logs)
-//   } catch (e) {
-//       // Deal with the fact the chain failed
-//
-//       console.log("errer?")
-//       console.log(e)
-//   }
-// })();
-//
-
-
-
-// (async () => {
-//   try {
-//     console.log("start")
-//
-//     const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/3cf09824e2164be79af077c456dbf13f')
-//     const contractAddress = "0x9008d19f58aabd9ed0d60971565aa8510560ab41"
-//     let endBlock = await provider.getBlockNumber()
-//     let startBlock = endBlock
-//
-//     while(1) {
-//         console.log(startBlock)
-//         console.log(endBlock)
-//         const filt = {
-//             address: contractAddress,
-//             fromBlock: startBlock,
-//             toBlock: endBlock
-//         }
-//         const logs = await provider.getLogs(filt)
-//         console.log(logs)
-//         console.log("====================")
-//         isCow(logs)
-//
-//         await sleep(60000)
-//         startBlock = endBlock + 1
-//         endBlock = await provider.getBlockNumber()
-//     }
-//   } catch (e) {
-//       // Deal with the fact the chain failed
-//
-//       console.log("errer?")
-//       console.log(e)
-//   }
-// })();
-
-
-
-
-// const provider = new ethers.providers.WebSocketProvider("wss://mainnet.infura.io/ws/v3/3cf09824e2164be79af077c456dbf13f");
-// const contractAddress = "0x9008d19f58aabd9ed0d60971565aa8510560ab41"
-// let txQueue = []
-// const filter = {
-//     address: contractAddress
-// }
-
-
-// provider.getLogs(filter, (logs) => {
-//
-//     console.log(logs)
-//
-//     //console.log(last_txHash)
-//     // tx = log.transactionHash
-//     // if (txQueue.includes(tx) == false) {
-//     //     txQueue.push(tx)
-//     //     if (txQueue.length > 0) {
-//     //         tx0 = txQueue[0]
-//     //         const receipt = await provider.getTransactionReceipt(tx0)
-//     //         const logs = receipt.logs
-//     //         const result = isCow(logs)
-//     //         // ?
-//     //         // ??last_txHash = log.transactionHash
-//     //         // ??
-//     //         // console.log(last_txHash)
-//     //         console.log("Is cows?")
-//     //         console.log(result)
-//     //     }
-//     // }
-//     //
-//     //
-//     // // New transaction
-//     // if (log.transactionHash != last_txHash) {
-//     //     // console.log("=======================")
-//     //     console.log("New transaction")
-//     //
-//     //     let promises: Promise< TransactionReceipt  >[ ] = [ ];
-//     //     promises.push();
-//     //      Promise.all(promises)
-//     //
-//     //     // console.log("=======================")
-//     // }
-// })
-
-// const provider = new ethers.providers.JsonRpcProvider('https://mainnet.infura.io/v3/3cf09824e2164be79af077c456dbf13f')
-// const receipt = await provider.getTransactionReceipt("0xaa68ce79d91191297287cb359f4229e5e105fa82d4e95c2951c53a26a6f5ff2d")
-// const logs = receipt.logs
-// console.log(logs)
-// const result = isCow(logs)
-// console.log(result)
-
-// const abiJson = require("./abi.json")
-// const abi = abiJson["abi"]
-// const contract = new ethers.Contract(
-//   contractAddress,
-//   abi,
-//   provider.getSigner(0)
-// );
-//
-// const newValue = await contract.address;
-// console.log(newValue);
-
-
-
-
-
-// var customWsProvider = new ethers.providers.WebSocketProvider("wss://mainnet.infura.io/ws/v3/3cf09824e2164be79af077c456dbf13f");
-//
-// customWsProvider.on("pending", (tx) => {
-//   customWsProvider.getTransaction(tx).then(function (transaction) {
-//     console.log(transaction);
-//   });
-// });
-
-
-
-// interface TransactionReceipt {
-//     to: string;
-//     from: string;
-//     contractAddress: string,
-//     transactionIndex: number,
-//     root?: string,
-//     gasUsed: BigNumber,
-//     logsBloom: string,
-//     blockHash: string,
-//     transactionHash: string,
-//     logs: Array<Log>,
-//     blockNumber: number,
-//     confirmations: number,
-//     cumulativeGasUsed: BigNumber,
-//     effectiveGasPrice: BigNumber,
-//     byzantium: boolean,
-//     type: number;
-//     status?: number
-// }

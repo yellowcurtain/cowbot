@@ -38,11 +38,9 @@ function sleep(ms) {
           }
         }
         
-        // console.log(transactions)
         for (const txHash of transactions) {
           const txReceipt = await provider.getTransactionReceipt(txHash)
           const txLogs = txReceipt.logs
-          // console.log(txLogs)
           const result = isCow(txLogs)
           console.log(txHash)
           console.log(result)
