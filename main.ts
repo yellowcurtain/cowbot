@@ -48,8 +48,18 @@ function sleep(ms) {
           console.log(result)
           
           if (result) {
-            const text = "We found a cow: https://etherscan.io/tx/" + txHash
+            
+            // count trades in transaction
+            let total_trade = 0
+            for (const entry of txLogs) {
+              if (entry.topics[0] == "0xa07a543ab8a018198e99ca0184c93fe9050a79400a0a723441f84de1d972cc17") {
+                  total_trade = total_trade + 1
+              }
+            }
+
+            const text = "We found a CoW, included " + total_trade + " trades. Transaction detail: https://etherscan.io/tx/" + txHash
             console.log(text)
+                        
             sendDiscordMessage(text)
             sendTwitterMessage(text)
           }
