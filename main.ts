@@ -58,7 +58,8 @@ function sleep(ms) {
             const text = "We found a CoW, included " + total_trade + " trades. Transaction detail: https://etherscan.io/tx/" + txHash
             console.log(text)
                         
-            sendDiscordMessage(text)
+            sendDiscordMessage(text, config.discord.webHookUrl)
+            sendDiscordMessage(text, config.discord.webHookUrl1)
             sendTwitterMessage(text)
           }
         }
